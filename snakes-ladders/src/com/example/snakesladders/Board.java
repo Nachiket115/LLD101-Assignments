@@ -1,8 +1,10 @@
 package com.example.snakesladders;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class Board {
     private final int size;
@@ -20,6 +22,10 @@ public final class Board {
 
     public int getSize() {
         return size;
+    }
+
+    public Map<Integer, Jump> getJumps() {
+        return Map.copyOf(jumps);
     }
 
     public boolean isFinalCell(int cell) {
@@ -57,6 +63,23 @@ public final class Board {
         }
         if (jumps.containsKey(jump.getStart())) {
             throw new IllegalArgumentException("Overlapping jump at cell " + jump.getStart());
+        }
+        validateNoCycle(jump);
+    }
+
+    private void validateNoCycle(Jump newJump) {
+        Map<Integer, Jump> candidateJumps = new HashMap<>(jumps);
+        candidateJumps.put(newJump.getStart(), newJump);
+
+        for (Integer start : candidateJumps.keySet()) {
+            Set<Integer> visited = new HashSet<>();
+            int current = start;
+            while (candidateJumps.containsKey(current)) {
+                if (!visited.add(current)) {
+                    throw new IllegalArgumentException("Snakes and ladders cannot create a cycle.");
+                }
+                current = candidateJumps.get(current).getEnd();
+            }
         }
     }
 }

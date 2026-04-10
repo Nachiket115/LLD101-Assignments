@@ -32,6 +32,8 @@ Supported APIs:
 - `exit(parkingTicket, exitTime)`
 
 ## 3. Class Diagram
+The Mermaid version of the UML diagram is available in `UML.md`.
+
 ```text
 +------------------------------------------------------+
 |                  ParkingLotService                   |
